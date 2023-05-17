@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// need to create the model for my custom portfolio
+// the user details represents a single user and the Projects refers to the projects of users
+
+model User {
+  name         String     @id
+  email        String?
+  bio          String?
+  twitter      String?
+  linkedin     String?
+  github       String?
+  technologies String[]
+  articles     Articles[]
+  projects     Projects[]
+}
+
+model Projects {
+  projectId         String   @id
+  name              String
+  description       String?
+  technologies_used String[]
+  github_link       String?
+  live_link         String?
+
+  // relationships 
+  userId String
+  user   User   @relation(fields: [userId], references: [name])
+}
+
+model Articles {
+  articleId         String  @id
+  title             String
+  short_description String?
+  live_link         String?
+
+  //relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [name])
+}
